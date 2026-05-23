@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>شرح أدوات فوتوشوب</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080a0f;
+      --surface: #0d1117;
+      --surface2: #161b24;
+      --surface3: #1e2633;
+      --accent: #00d4ff;
+      --accent2: #ff6b35;
+      --accent3: #a855f7;
+      --text: #e8edf5;
+      --muted: #8b95a8;
+      --border: rgba(255, 255, 255, 0.06);
+      --glow: 0 0 40px rgba(0, 212, 255, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ─── SIDEBAR NAV ─── */
+    .sidebar {
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100vh;
+      width: 260px;
+      background: rgba(8, 10, 15, 0.92);
+      backdrop-filter: blur(20px);
+      border-left: 1px solid var(--border);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 0;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar-logo {
+      padding: 0 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo .ps-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      padding: 0.4rem 0.9rem;
+      border-radius: 4px;
+    }
+
+    .sidebar-logo h2 {
+      margin-top: 0.8rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .sidebar-logo p {
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 0;
+      scrollbar-width: none;
+    }
+
+    nav::-webkit-scrollbar {
+      display: none;
+    }
+
+    nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      border-right: 3px solid transparent;
+      position: relative;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    nav a.active {
+      color: var(--accent);
+      border-right-color: var(--accent);
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    nav a .nav-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      opacity: 0.6;
+      width: 18px;
+      flex-shrink: 0;
+    }
+
+    nav a.active .nav-num {
+      opacity: 1;
+    }
+
+    .nav-section-label {
+      padding: 1rem 1.5rem 0.3rem;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(139, 149, 168, 0.4);
+    }
+
+    /* ─── MAIN CONTENT ─── */
+    main {
+      margin-right: 260px;
+      min-height: 100vh;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 4rem 3rem;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 30% 50%, rgba(0, 212, 255, 0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 80% 30%, rgba(168, 85, 247, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 80% at 60% 80%, rgba(255, 107, 53, 0.05) 0%, transparent 60%);
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 780px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      animation: fadeUp 0.8s 0.15s ease both;
+    }
+
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 500px;
+      margin-inline: auto;
+      line-height: 1.8;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .hero-pills {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+      animation: fadeUp 0.8s 0.45s ease both;
+    }
+
+    .pill {
+      padding: 0.45rem 1.1rem;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.02);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: fadeUp 0.8s 0.6s ease both;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, transparent, var(--accent));
+      animation: scrollLine 2s infinite;
+    }
+
+    /* ─── SECTIONS ─── */
+    .tool-section {
+      padding: 6rem 3rem;
+      border-top: 1px solid var(--border);
+      position: relative;
+    }
+
+    .tool-section:nth-child(even) {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 2rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-number {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      padding-top: 0.4rem;
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    .section-title-group {
+      flex: 1;
+    }
+
+    .tool-label {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 4px;
+      margin-bottom: 0.8rem;
+    }
+
+    .label-blue {
+      color: var(--accent);
+      background: rgba(0, 212, 255, 0.08);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .label-orange {
+      color: var(--accent2);
+      background: rgba(255, 107, 53, 0.08);
+      border: 1px solid rgba(255, 107, 53, 0.2);
+    }
+
+    .label-purple {
+      color: var(--accent3);
+      background: rgba(168, 85, 247, 0.08);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+
+    .label-green {
+      color: #22c55e;
+      background: rgba(34, 197, 94, 0.08);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    .label-pink {
+      color: #f472b6;
+      background: rgba(244, 114, 182, 0.08);
+      border: 1px solid rgba(244, 114, 182, 0.2);
+    }
+
+    .section-title-group h2 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title-group .en-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── CONTENT BODY ─── */
+    .content-body {
+      max-width: 860px;
+    }
+
+    .content-body p {
+      font-size: 1.05rem;
+      color: #c4ccd8;
+      line-height: 1.9;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ─── IMAGE GRID ─── */
+    .img-grid {
+      display: grid;
+      gap: 1.2rem;
+      margin: 2.5rem 0;
+    }
+
+    .img-grid-1 {
+      grid-template-columns: 1fr;
+    }
+
+    .img-grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .img-grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .img-grid-auto {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .img-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      group: true;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: zoom-in;
+    }
+
+    .img-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 212, 255, 0.1);
+    }
+
+    .img-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .img-card:hover img {
+      transform: scale(1.03);
+    }
+
+    .img-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.8rem 1rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-family: 'IBM Plex Mono', monospace;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .img-card:hover .img-caption {
+      opacity: 1;
+    }
+
+    /* ─── COMPARISON TABLE ─── */
+    .compare-table-wrap {
+      margin: 2.5rem 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .compare-table-title {
+      padding: 1rem 1.5rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--surface3);
+      border-bottom: 1px solid var(--border);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 1rem 1.5rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-align: right;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    thead th:first-child {
+      color: var(--accent);
+    }
+
+    tbody td {
+      padding: 1rem 1.5rem;
+      font-size: 0.9rem;
+      color: #c4ccd8;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: top;
+      line-height: 1.7;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    tbody td:first-child {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--accent2);
+      white-space: nowrap;
+    }
+
+    /* ─── INFO CARD ─── */
+    .info-card {
+      display: flex;
+      gap: 1.2rem;
+      padding: 1.5rem;
+      border-radius: 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    .info-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .info-icon-blue {
+      background: rgba(0, 212, 255, 0.1);
+    }
+
+    .info-icon-orange {
+      background: rgba(255, 107, 53, 0.1);
+    }
+
+    .info-card p {
+      font-size: 0.92rem;
+      color: #c4ccd8;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    /* ─── DIVIDER ─── */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(to left, transparent, var(--border), transparent);
+      margin: 3rem 0;
+    }
+
+    /* ─── LIGHTBOX ─── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.95);
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 40px 120px rgba(0, 0, 0, 0.8);
+      animation: zoomIn 0.25s ease;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* ─── PROGRESS BAR ─── */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 260px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 200;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--accent), var(--accent3));
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      padding: 4rem 3rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      text-align: center;
+    }
+
+    .footer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .footer-badge span {
+      color: var(--accent);
+    }
+
+    /* ─── MOBILE TOGGLE ─── */
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 200;
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-size: 1.1rem;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    @keyframes scrollLine {
+      0% {
+        transform: scaleY(0);
+        transform-origin: top;
+      }
+
+      50% {
+        transform: scaleY(1);
+        transform-origin: top;
+      }
+
+      51% {
+        transform: scaleY(1);
+        transform-origin: bottom;
+      }
+
+      100% {
+        transform: scaleY(0);
+        transform-origin: bottom;
+      }
+    }
+
+    @keyframes zoomIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      main {
+        margin-right: 0;
+      }
+
+      .progress-bar {
+        right: 0;
+      }
+
+      .sidebar-toggle {
+        display: flex;
+      }
+
+      .img-grid-2,
+      .img-grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .tool-section {
+        padding: 4rem 1.5rem;
+      }
+
+      .hero {
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    /* ─── STEP CARD ─── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+
+    .step {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .step p {
+      font-size: 0.95rem;
+      color: #c4ccd8;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress"></div>
+  </div>
+
+  <!-- Sidebar Toggle (Mobile) -->
+  <button class="sidebar-toggle" id="toggleBtn" onclick="toggleSidebar()">☰</button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="ps-badge">
+        <span>●</span> Adobe Photoshop
+      </div>
+      <h2>شرح أدوات فوتوشوب</h2>
+      <p>دليل الفصل الدراسي</p>
+    </div>
+
+    <nav>
+      <div class="nav-section-label">المحتوى</div>
+      <a href="#hero" class="active">
+        <span class="nav-num">00</span> المقدمة
+      </a>
+      <div class="nav-section-label">الأدوات</div>
+      <a href="#crop">
+        <span class="nav-num">01</span> أداة القص — Crop Tool
+      </a>
+      <a href="#quick-select">
+        <span class="nav-num">02</span> Quick Selection Tool
+      </a>
+      <a href="#stamp">
+        <span class="nav-num">03</span> الـ Stamp Tool
+      </a>
+      <a href="#blur">
+        <span class="nav-num">04</span> الـ Blur Tool
+      </a>
+      <a href="#color">
+        <span class="nav-num">05</span> تلوين العناصر
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-grid"></div>
+      <div class="hero-content">
+        <div class="hero-eyebrow">Adobe Photoshop</div>
+        <h1>شرح <span class="highlight">أدوات</span><br>فوتوشوب</h1>
+        <p>دليل شامل لأبرز الأدوات التي تعلمناها خلال هذا الفصل الدراسي — من القص والتحديد وصولاً للتأثيرات المحترفة</p>
+        <div class="hero-pills">
+          <div class="pill"><span class="pill-dot"></span> Crop Tool</div>
+          <div class="pill"><span class="pill-dot" style="background:var(--accent2)"></span> Quick Selection</div>
+          <div class="pill"><span class="pill-dot" style="background:var(--accent3)"></span> Stamp Tool</div>
+          <div class="pill"><span class="pill-dot" style="background:#22c55e"></span> Blur Tool</div>
+          <div class="pill"><span class="pill-dot" style="background:#f472b6"></span> تلوين العناصر</div>
+        </div>
+      </div>
+      <div class="hero-scroll">
+        <span>اسحب للأسفل</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 1: Crop Tool ── -->
+    <section class="tool-section" id="crop">
+      <div class="section-header reveal">
+        <span class="section-number">01 ——</span>
+        <div class="section-title-group">
+          <span class="tool-label label-blue">Selection & Crop</span>
+          <h2>أداة القص</h2>
+          <p class="en-name">Crop Tool</p>
+        </div>
+      </div>
+
+      <div class="content-body">
+        <div class="info-card reveal">
+          <div class="info-icon info-icon-blue">✂️</div>
+          <p>
+            تُعدّ <strong>Crop Tool</strong> من أبسط وأقوى الأدوات في فوتوشوب. وظيفتها الأساسية هي قص أجزاء من الصورة أو
+            تغيير مقاساتها بدقة متناهية، مما يجعلها الخيار الأول عند ضبط التكوين البصري.
+          </p>
+        </div>
+
+        <div class="img-grid img-grid-2 reveal">
+          <div class="img-card" onclick="openLightbox('Pictures/Picture1.png')">
+            <img src="Pictures/Picture1.png" alt="Crop Tool - صورة 1" loading="lazy">
+            <div class="img-caption">Picture1.png — Crop Tool</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('Pictures/Picture2.png')">
+            <img src="Pictures/Picture2.png" alt="Crop Tool - صورة 2" loading="lazy">
+            <div class="img-caption">Picture2.png — Crop Tool</div>
+          </div>
+        </div>
+
+        <div class="steps reveal">
+          <div class="step">
+            <div class="step-num">1</div>
+            <p>حدد أداة القص من شريط الأدوات على يسار الشاشة أو اضغط على المفتاح <strong>C</strong></p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <p>اسحب إطار القص فوق المنطقة التي تريد الإبقاء عليها في الصورة</p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <p>اضغط <strong>Enter</strong> لتأكيد القص وحذف الأجزاء خارج الإطار</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 2: Quick Selection ── -->
+    <section class="tool-section" id="quick-select">
+      <div class="section-header reveal">
+        <span class="section-number">02 ——</span>
+        <div class="section-title-group">
+          <span class="tool-label label-orange">Selection Tools</span>
+          <h2>Quick Selection Tool</h2>
+          <p class="en-name">أداة التحديد السريع</p>
+        </div>
+      </div>
+
+      <div class="content-body">
+        <div class="info-card reveal">
+          <div class="info-icon info-icon-orange">🪄</div>
+          <p>
+            تعمل هذه الأداة كفرشاة ذكية — تمرّر فوق العنصر الذي تريد تحديده، ويقوم فوتوشوب تلقائياً بالتعرف عليه وتحديد
+            حدوده بدقة بناءً على الألوان والحواف. لا داعي للدقة الشديدة، فالذكاء الاصطناعي داخل البرنامج يساعدك على
+            إنهاء التحديد بسرعة.
+          </p>
+        </div>
+
+        <div class="img-grid img-grid-3 reveal">
+          <div class="img-card" onclick="openLightbox('Pictures/Picture3.png')">
+            <img src="Pictures/Picture3.png" alt="Quick Selection - 1" loading="lazy">
+            <div class="img-caption">Picture3.png</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('Pictures/Picture4.png')">
+            <img src="Pictures/Picture4.png" alt="Quick Selection - 2" loading="lazy">
+            <div class="img-caption">Picture4.png</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('Pictures/Picture5.png')">
+            <img src="Pictures/Picture5.png" alt="Quick Selection - 3" loading="lazy">
+            <div class="img-caption">Picture5.png</div>
+          </div>
+        </div>
+
+        <div class="steps reveal">
+          <div class="step">
+            <div class="step-num">1</div>
+            <p>اختر Quick Selection Tool من شريط الأدوات (اختصار: <strong>W</strong>)</p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <p>تمرّر الفرشاة فوق العنصر المراد تحديده — فوتوشوب سيتعرف عليه تلقائياً</p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <p>استخدم <strong>Shift+Drag</strong> لإضافة مناطق للتحديد، و<strong>Alt+Drag</strong> لحذف مناطق منه</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 3: Stamp Tool ── -->
+    <section class="tool-section" id="stamp">
+      <div class="section-header reveal">
+        <span class="section-number">03 ——</span>
+        <div class="section-title-group">
+          <span class="tool-label label-purple">Cloning & Healing</span>
+          <h2>الـ Stamp Tool</h2>
+          <p class="en-name">Clone Stamp Tool</p>
+        </div>
+      </div>
+
+      <div class="content-body">
+        <div class="info-card reveal">
+          <div class="info-icon" style="background:rgba(168,85,247,0.1)">🖨️</div>
+          <p>
+            تنسخ جزءاً من الصورة وتطبعه بمكان آخر — وكأنها ختم. تضغط <strong>Alt</strong> لتحديد نقطة المصدر، ثم تدهن في
+            المكان الجديد فتظهر نسخة طبق الأصل من البيكسلات المصدر.
+          </p>
+        </div>
+
+        <div class="img-grid img-grid-2 reveal">
+          <div class="img-card" onclick="openLightbox('Pictures/Picture6.png')">
+            <img src="Pictures/Picture6.png" alt="Stamp Tool - 1" loading="lazy">
+            <div class="img-caption">Picture6.png — Clone Stamp</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('Pictures/Picture7.png')">
+            <img src="Pictures/Picture7.png" alt="Stamp Tool - 2" loading="lazy">
+            <div class="img-caption">Picture7.png — Clone Stamp</div>
+          </div>
+        </div>
+
+        <div class="compare-table-wrap reveal">
+          <div class="compare-table-title">// مقارنة — Stamp Tool vs Healing Brush</div>
+          <table>
+            <thead>
+              <tr>
+                <th>الأداة</th>
+                <th>الوظيفة</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Stamp Tool</td>
+                <td>تنسخ نفس البيكسلات حرفياً بشكل مطابق تماماً للمصدر دون أي تعديل</td>
+              </tr>
+              <tr>
+                <td>Healing Brush</td>
+                <td>تنسخ البيكسلات لكنها تدمجها بذكاء مع لون وإضاءة المنطقة المستهدفة</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 4: Blur Tool ── -->
+    <section class="tool-section" id="blur">
+      <div class="section-header reveal">
+        <span class="section-number">04 ——</span>
+        <div class="section-title-group">
+          <span class="tool-label label-green">Blur & Focus</span>
+          <h2>الـ Blur Tool</h2>
+          <p class="en-name">Blur Tool</p>
+        </div>
+      </div>
+
+      <div class="content-body">
+        <div class="info-card reveal">
+          <div class="info-icon" style="background:rgba(34,197,94,0.1)">💨</div>
+          <p>
+            تخفف حدة التفاصيل وتجعل المنطقة ناعمة أو ضبابية — وبدل ما تكون التفاصيل واضحة جداً، تصير أنعم وأكثر تلاحماً
+            مع المحيط. كما تُستخدم لدمج بسيط ومحكم بين العنصر والخلفية.
+          </p>
+        </div>
+
+        <div class="img-grid img-grid-auto reveal">
+          <div class="img-card" onclick="openLightbox('Pictures/Picture8.png')">
+            <img src="Pictures/Picture8.png" alt="Blur Tool - 1" loading="lazy">
+            <div class="img-caption">Picture8.png</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('Pictures/Picture9.png')">
+            <img src="Pictures/Picture9.png" alt="Blur Tool - 2" loading="lazy">
+            <div class="img-caption">Picture9.png</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('Pictures/Picture10.png')">
+            <img src="Pictures/Picture10.png" alt="Blur Tool - 3" loading="lazy">
+            <div class="img-caption">Picture10.png</div>
+          </div>
+        </div>
+
+        <div class="compare-table-wrap reveal">
+          <div class="compare-table-title">// مقارنة — Blur Tool vs Gaussian Blur</div>
+          <table>
+            <thead>
+              <tr>
+                <th>الأداة</th>
+                <th>الاستخدام</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Blur Tool</td>
+                <td>تمويه يدوي بالفرشاة — تتحكم بدقة في المناطق المراد تلطيفها بكل حرية</td>
+              </tr>
+              <tr>
+                <td>Gaussian Blur</td>
+                <td>تمويه كامل وسريع لمنطقة أو طبقة كاملة دفعة واحدة من خلال Filter</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SECTION 5: Coloring ── -->
+    <section class="tool-section" id="color">
+      <div class="section-header reveal">
+        <span class="section-number">05 ——</span>
+        <div class="section-title-group">
+          <span class="tool-label label-pink">Color Grading</span>
+          <h2>تلوين العناصر</h2>
+          <p class="en-name">Selective Colorization</p>
+        </div>
+      </div>
+
+      <div class="content-body">
+        <div class="info-card reveal">
+          <div class="info-icon" style="background:rgba(244,114,182,0.1)">🎨</div>
+          <p>
+            من أروع التأثيرات البصرية في فوتوشوب — تحويل الصورة كاملةً إلى أبيض وأسود مع الإبقاء على عنصر واحد محدد
+            بألوانه الطبيعية. يُعطي هذا الأسلوب تأثيراً درامياً قوياً يُبرز العنصر الرئيسي في التصميم.
+          </p>
+        </div>
+
+        <div class="img-grid img-grid-1 reveal">
+          <div class="img-card" onclick="openLightbox('Pictures/Picture11.png')" style="max-height: 460px;">
+            <img src="Pictures/Picture11.png" alt="Selective Colorization" loading="lazy"
+              style="height:460px;object-fit:cover;">
+            <div class="img-caption">Picture11.png — Selective Color</div>
+          </div>
+        </div>
+
+        <div class="steps reveal">
+          <div class="step">
+            <div class="step-num">1</div>
+            <p>استخدم <strong>Quick Selection Tool</strong> لتحديد العنصر الذي تريد إبقاءه ملوناً</p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <p>اعكس التحديد (<strong>Ctrl+Shift+I</strong>) لتحديد باقي الصورة</p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <p>أضف Adjustment Layer من نوع <strong>Hue/Saturation</strong> وخفض الـ Saturation إلى −100</p>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <p>النتيجة: العنصر المحدد يبقى بألوانه وباقي الصورة تصبح بالأبيض والأسود</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-badge">
+        <span>Adobe Photoshop</span> — شرح الأدوات — الفصل الدراسي
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close">✕</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  </div>
+
+  <script>
+    // ── Lightbox ──
+    function openLightbox(src) {
+      document.getElementById('lightboxImg').src = src;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // ── Scroll Progress ──
+    window.addEventListener('scroll', () => {
+      const doc = document.documentElement;
+      const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight);
+      document.getElementById('progress').style.width = (scrolled * 100) + '%';
+      updateNav();
+      revealElements();
+    });
+
+    // ── Active Nav ──
+    function updateNav() {
+      const sections = ['hero', 'crop', 'quick-select', 'stamp', 'blur', 'color'];
+      const links = document.querySelectorAll('nav a');
+      const scrollY = window.scrollY + 200;
+
+      let current = 'hero';
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollY) current = id;
+      });
+
+      links.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    }
+
+    // ── Reveal on Scroll ──
+    function revealElements() {
+      document.querySelectorAll('.reveal').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 60) {
+          el.classList.add('visible');
+        }
+      });
+    }
+
+    // ── Mobile Sidebar ──
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // Close sidebar when clicking a nav link on mobile
+    document.querySelectorAll('nav a').forEach(a => {
+      a.addEventListener('click', () => {
+        if (window.innerWidth <= 900) {
+          document.getElementById('sidebar').classList.remove('open');
+        }
+      });
+    });
+
+    // ── Init ──
+    revealElements();
+    updateNav();
+  </script>
+
+</body>
+
+</html>
