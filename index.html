@@ -671,6 +671,67 @@
       color: var(--accent);
     }
 
+    .footer-author {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .footer-dot {
+      color: var(--muted);
+    }
+
+    .hero-author {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 2.5rem;
+      padding: 0.6rem 1.2rem 0.6rem 0.6rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      animation: fadeUp 0.8s 0.55s ease both;
+    }
+
+    .author-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent3));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: #000;
+      flex-shrink: 0;
+    }
+
+    .author-info {
+      display: flex;
+      flex-direction: column;
+      text-align: right;
+      line-height: 1.2;
+    }
+
+    .author-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .author-sub {
+      font-size: 0.68rem;
+      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+
     /* ─── MOBILE TOGGLE ─── */
     .sidebar-toggle {
       display: none;
@@ -897,6 +958,14 @@
           <div class="pill"><span class="pill-dot" style="background:#22c55e"></span> Blur Tool</div>
           <div class="pill"><span class="pill-dot" style="background:#f472b6"></span> تلوين العناصر</div>
         </div>
+
+        <div class="hero-author">
+          <div class="author-avatar">إح</div>
+          <div class="author-info">
+            <span class="author-name">إيهاب حسن</span>
+            <span class="author-sub">Ehab Hasan</span>
+          </div>
+        </div>
       </div>
       <div class="hero-scroll">
         <span>اسحب للأسفل</span>
@@ -924,14 +993,10 @@
           </p>
         </div>
 
-        <div class="img-grid img-grid-2 reveal">
-          <div class="img-card" onclick="openLightbox('Pictures/Picture1.png')">
-            <img src="Pictures/Picture1.png" alt="Crop Tool - صورة 1" loading="lazy">
+        <div class="img-grid img-grid-1 reveal">
+          <div class="img-card" onclick="openLightbox('pictures/Picture1.png')">
+            <img src="pictures/Picture1.png" alt="Crop Tool" loading="lazy">
             <div class="img-caption">Picture1.png — Crop Tool</div>
-          </div>
-          <div class="img-card" onclick="openLightbox('Pictures/Picture2.png')">
-            <img src="Pictures/Picture2.png" alt="Crop Tool - صورة 2" loading="lazy">
-            <div class="img-caption">Picture2.png — Crop Tool</div>
           </div>
         </div>
 
@@ -974,17 +1039,17 @@
         </div>
 
         <div class="img-grid img-grid-3 reveal">
-          <div class="img-card" onclick="openLightbox('Pictures/Picture3.png')">
-            <img src="Pictures/Picture3.png" alt="Quick Selection - 1" loading="lazy">
-            <div class="img-caption">Picture3.png</div>
+          <div class="img-card" onclick="openLightbox('pictures/Picture2.png')">
+            <img src="pictures/Picture2.png" alt="Quick Selection - 1" loading="lazy">
+            <div class="img-caption">Picture2.png — Quick Selection Tool</div>
           </div>
-          <div class="img-card" onclick="openLightbox('Pictures/Picture4.png')">
-            <img src="Pictures/Picture4.png" alt="Quick Selection - 2" loading="lazy">
-            <div class="img-caption">Picture4.png</div>
+          <div class="img-card" onclick="openLightbox('pictures/Picture3.png')">
+            <img src="pictures/Picture3.png" alt="Quick Selection - 2" loading="lazy">
+            <div class="img-caption">Picture3.png — Quick Selection Tool</div>
           </div>
-          <div class="img-card" onclick="openLightbox('Pictures/Picture5.png')">
-            <img src="Pictures/Picture5.png" alt="Quick Selection - 3" loading="lazy">
-            <div class="img-caption">Picture5.png</div>
+          <div class="img-card" onclick="openLightbox('pictures/Picture4.png')">
+            <img src="pictures/Picture4.png" alt="Quick Selection - 3" loading="lazy">
+            <div class="img-caption">Picture4.png — Quick Selection Tool</div>
           </div>
         </div>
 
@@ -1026,13 +1091,13 @@
         </div>
 
         <div class="img-grid img-grid-2 reveal">
-          <div class="img-card" onclick="openLightbox('Pictures/Picture6.png')">
-            <img src="Pictures/Picture6.png" alt="Stamp Tool - 1" loading="lazy">
-            <div class="img-caption">Picture6.png — Clone Stamp</div>
+          <div class="img-card" onclick="openLightbox('pictures/Picture5.png')">
+            <img src="pictures/Picture5.png" alt="Stamp Tool - 1" loading="lazy">
+            <div class="img-caption">Picture5.png — Clone Stamp</div>
           </div>
-          <div class="img-card" onclick="openLightbox('Pictures/Picture7.png')">
-            <img src="Pictures/Picture7.png" alt="Stamp Tool - 2" loading="lazy">
-            <div class="img-caption">Picture7.png — Clone Stamp</div>
+          <div class="img-card" onclick="openLightbox('pictures/Picture6.png')">
+            <img src="pictures/Picture6.png" alt="Stamp Tool - 2" loading="lazy">
+            <div class="img-caption">Picture6.png — Clone Stamp</div>
           </div>
         </div>
 
@@ -1080,18 +1145,10 @@
           </p>
         </div>
 
-        <div class="img-grid img-grid-auto reveal">
-          <div class="img-card" onclick="openLightbox('Pictures/Picture8.png')">
-            <img src="Pictures/Picture8.png" alt="Blur Tool - 1" loading="lazy">
-            <div class="img-caption">Picture8.png</div>
-          </div>
-          <div class="img-card" onclick="openLightbox('Pictures/Picture9.png')">
-            <img src="Pictures/Picture9.png" alt="Blur Tool - 2" loading="lazy">
-            <div class="img-caption">Picture9.png</div>
-          </div>
-          <div class="img-card" onclick="openLightbox('Pictures/Picture10.png')">
-            <img src="Pictures/Picture10.png" alt="Blur Tool - 3" loading="lazy">
-            <div class="img-caption">Picture10.png</div>
+        <div class="img-grid img-grid-1 reveal">
+          <div class="img-card" onclick="openLightbox('pictures/Picture7.png')">
+            <img src="pictures/Picture7.png" alt="Blur Tool" loading="lazy">
+            <div class="img-caption">Picture7.png — Blur Tool</div>
           </div>
         </div>
 
@@ -1139,10 +1196,21 @@
           </p>
         </div>
 
-        <div class="img-grid img-grid-1 reveal">
-          <div class="img-card" onclick="openLightbox('Pictures/Picture11.png')" style="max-height: 460px;">
-            <img src="Pictures/Picture11.png" alt="Selective Colorization" loading="lazy"
-              style="height:460px;object-fit:cover;">
+        <div class="img-grid img-grid-2 reveal">
+          <div class="img-card" onclick="openLightbox('pictures/Picture8.png')">
+            <img src="pictures/Picture8.png" alt="تلوين العناصر - 1" loading="lazy">
+            <div class="img-caption">Picture8.png — Selective Color</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('pictures/Picture9.png')">
+            <img src="pictures/Picture9.png" alt="تلوين العناصر - 2" loading="lazy">
+            <div class="img-caption">Picture9.png — Selective Color</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('pictures/Picture10.png')">
+            <img src="pictures/Picture10.png" alt="تلوين العناصر - 3" loading="lazy">
+            <div class="img-caption">Picture10.png — Selective Color</div>
+          </div>
+          <div class="img-card" onclick="openLightbox('pictures/Picture11.png')">
+            <img src="pictures/Picture11.png" alt="تلوين العناصر - 4" loading="lazy">
             <div class="img-caption">Picture11.png — Selective Color</div>
           </div>
         </div>
@@ -1172,6 +1240,11 @@
     <footer class="footer">
       <div class="footer-badge">
         <span>Adobe Photoshop</span> — شرح الأدوات — الفصل الدراسي
+      </div>
+      <div class="footer-author">
+        <span>إيهاب حسن</span>
+        <span class="footer-dot">·</span>
+        <span>Ehab Hasan</span>
       </div>
     </footer>
 
